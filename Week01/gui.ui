@@ -20,7 +20,7 @@
       <x>10</x>
       <y>60</y>
       <width>621</width>
-      <height>301</height>
+      <height>191</height>
      </rect>
     </property>
    </widget>
@@ -29,7 +29,7 @@
      <rect>
       <x>10</x>
       <y>30</y>
-      <width>113</width>
+      <width>491</width>
       <height>20</height>
      </rect>
     </property>
@@ -50,7 +50,7 @@
    <widget class="QPushButton" name="getContentButton">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>510</x>
       <y>30</y>
       <width>121</width>
       <height>23</height>
@@ -60,17 +60,66 @@
      <string>Lấy nội dung bài báo</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="goNextButton">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>382</y>
+      <x>550</x>
+      <y>300</y>
       <width>75</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>Bắt đầu ghi</string>
+     <string>Câu kế</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="currentSentenceBrowser">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>270</y>
+      <width>461</width>
+      <height>91</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="goPrevButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>300</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Câu trước</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="recordButton">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>370</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ghi</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="saveAndQuitButton">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>390</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Lưu lại và thoát</string>
     </property>
    </widget>
   </widget>

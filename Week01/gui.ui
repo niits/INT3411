@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>1190</width>
     <height>480</height>
    </rect>
   </property>
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>60</y>
       <width>621</width>
-      <height>191</height>
+      <height>351</height>
      </rect>
     </property>
    </widget>
@@ -60,60 +60,37 @@
      <string>Lấy nội dung bài báo</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="goNextButton">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>300</y>
-      <width>75</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Câu kế</string>
-    </property>
-   </widget>
-   <widget class="QTextBrowser" name="currentSentenceBrowser">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>270</y>
-      <width>461</width>
-      <height>91</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="goPrevButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>300</y>
-      <width>61</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Câu trước</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="recordButton">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>370</y>
+      <x>1110</x>
+      <y>60</y>
       <width>75</width>
-      <height>23</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>Ghi</string>
+     <string>Ghi âm</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="goNextButton">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>140</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Chuyển câu</string>
     </property>
    </widget>
    <widget class="QPushButton" name="saveAndQuitButton">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>390</y>
+      <x>650</x>
+      <y>370</y>
       <width>141</width>
       <height>41</height>
      </rect>
@@ -122,13 +99,39 @@
      <string>Lưu lại và thoát</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="stopButton">
+    <property name="geometry">
+     <rect>
+      <x>1110</x>
+      <y>102</y>
+      <width>75</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Dừng ghi</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="textInput">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>60</y>
+      <width>461</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="plainText">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
+     <width>1190</width>
      <height>21</height>
     </rect>
    </property>

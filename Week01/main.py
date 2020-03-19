@@ -1,24 +1,24 @@
+import os
+import re
 import sys
 import threading
 import urllib.request
 import wave
-from pprint import pprint
 
 import pyaudio
-import sounddevice as sd
-import os
-import re
-
-from PyQt5.QtWidgets import QMessageBox, QFileDialog
-from slugify import slugify
-from PyQt5 import QtWidgets, uic, QtCore, QtGui
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 from parsel import Selector
+from slugify import slugify
+
+from Week01.ui_mainwindow import Ui_MainWindow
 
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self, chunk=3024, frmat=pyaudio.paInt16, channels=2, rate=44100, py=pyaudio.PyAudio()):
         super(Ui, self).__init__()
-        uic.loadUi('gui.ui', self)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
 
         self.getContentButton = self.findChild(QtWidgets.QPushButton, 'getContentButton')
         self.recordButton = self.findChild(QtWidgets.QPushButton, 'recordButton')
@@ -70,16 +70,15 @@ class Ui(QtWidgets.QMainWindow):
                 msg.exec_()
                 fp = None
             if fp:
-                bytes = fp.read()
-                text = bytes.decode("utf8")
+                byte = fp.read()
+                text = byte.decode("utf8")
                 fp.close()
                 sel = Selector(text=text)
                 title = sel.css('title').get()
-                self.dir_path = slugify(re.sub(self.cleanR, '', title))
-
-                if not os.path.exists('./records/' + self.dir_path):
-                    os.mkdir('./records/' + self.dir_path)
-                with open('./records/' + self.dir_path + '/index.txt', 'w') as f:
+                self.dir_path = 'records' + os.sep + slugify(re.sub(self.cleanR, '', title))
+                if not os.path.exists(self.dir_path):
+                    os.mkdir(self.dir_path)
+                with open(self.dir_path + os.sep + 'index.txt', 'w') as f:
                     f.write(url + '\n')
 
                 result = sel.css('article').get()
@@ -91,16 +90,12 @@ class Ui(QtWidgets.QMainWindow):
                 text-indent:0px;">""" + result + """<br /></p></body></html>""")
 
     def save_and_quit(self):
-        try:
-            print(self.sentences)
-            f = open('./records/' + self.dir_path + '/index.txt', 'a', encoding='utf-8')
-            for block in self.sentences:
-                f.write(block['text'] + '\n')
-                f.write(block['file'] + '\n')
-            f.close()
-            self.close()
-        except Exception as e:
-            print(e)
+        f = open(self.dir_path + os.sep + 'index.txt', 'a', encoding='utf-8')
+        for block in self.sentences:
+            f.write(block['text'] + '\n')
+            f.write(block['file'] + '\n')
+        f.close()
+        self.close()
 
     def go_next(self):
         self.textInput.setPlainText('')
@@ -116,7 +111,6 @@ class Ui(QtWidgets.QMainWindow):
     def record(self):
         text = self.textInput.toPlainText()
         if text:
-            print('1' if text else 'clgt')
             file_name = slugify(re.sub(self.cleanR, '', text)) + '.wav'
             self.st = 1
             self.frames = []
@@ -125,13 +119,12 @@ class Ui(QtWidgets.QMainWindow):
             while True:
                 data = stream.read(self.CHUNK)
                 self.frames.append(data)
-                print("* recording " + str(self.st))
                 if not self.st:
                     break
 
             stream.close()
 
-            wf = wave.open('./records/' + self.dir_path + '/' + file_name, 'wb')
+            wf = wave.open(self.dir_path + os.sep + file_name, 'wb')
             wf.setnchannels(self.CHANNELS)
             wf.setsampwidth(self.p.get_sample_size(self.FORMAT))
             wf.setframerate(self.RATE)
@@ -147,7 +140,6 @@ class Ui(QtWidgets.QMainWindow):
             self.thread.join()
             self.sentences.append(self.current_sentence)
             self.current_sentence = {}
-            pprint(self.sentences)
 
     def closeEvent(self, event):
         print(threading.active_count())

@@ -4,14 +4,13 @@ import sys
 import threading
 import urllib.request
 import wave
-
 import pyaudio
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 from parsel import Selector
 from slugify import slugify
 
-from Week01.ui_mainwindow import Ui_MainWindow
+from ui_mainwindow import Ui_MainWindow
 
 
 class Ui(QtWidgets.QMainWindow):
@@ -30,6 +29,9 @@ class Ui(QtWidgets.QMainWindow):
         self.textInput = self.findChild(QtWidgets.QPlainTextEdit, 'textInput')
 
         self.contentBrowser = self.findChild(QtWidgets.QTextBrowser, 'contentBrowser')
+        self.textBrowser = self.findChild(QtWidgets.QTextBrowser, 'textBrowser')
+
+        self.statusLabel = self.findChild(QtWidgets.QLabel, 'statusLabel')
 
         self.getContentButton.clicked.connect(self.get_html_content)
         self.recordButton.clicked.connect(self.start_record)
@@ -50,6 +52,7 @@ class Ui(QtWidgets.QMainWindow):
         self.cleanR = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
         self.dir_path = ''
         self.current_sentence = {}
+        self.current_index = 0
         self.sentences = []
         self.thread = None
         self.show()
@@ -75,43 +78,34 @@ class Ui(QtWidgets.QMainWindow):
                 fp.close()
                 sel = Selector(text=text)
                 title = sel.css('title').get()
-                self.dir_path = 'records' + os.sep + slugify(re.sub(self.cleanR, '', title))
+                self.dir_path = 'records' + os.sep + slugify(re.sub(self.cleanR, '', title)) + os.sep
                 if not os.path.exists(self.dir_path):
                     os.mkdir(self.dir_path)
                 with open(self.dir_path + os.sep + 'index.txt', 'w') as f:
                     f.write(url + '\n')
 
                 result = sel.css('article').get()
-                self.contentBrowser.append("""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" 
+                self.contentBrowser.setHtml("""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" 
                 "http://www.w3.org/TR/REC-html40/strict.dtd">\n<html><head><meta name="qrichtext" content="1" /><style 
                 type="text/css">\np, li { white-space: pre-wrap; }\n</style></head><body style=" font-family:'MS Shell 
                 Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">\n<p style="-qt-paragraph-type:empty; 
                 margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
                 text-indent:0px;">""" + result + """<br /></p></body></html>""")
 
-    def save_and_quit(self):
-        f = open(self.dir_path + os.sep + 'index.txt', 'a', encoding='utf-8')
-        for block in self.sentences:
-            f.write(block['text'] + '\n')
-            f.write(block['file'] + '\n')
-        f.close()
-        self.close()
-
-    def go_next(self):
-        self.textInput.setPlainText('')
-
     def start_record(self):
-        self.thread = threading.Thread(target=self.record)
-        self.thread.setDaemon(True)
-        try:
-            self.thread.start()
-        except (KeyboardInterrupt, SystemExit):
-            sys.exit()
+        if not self.st :
+            self.thread = threading.Thread(target=self.record)
+            self.thread.setDaemon(True)
+            try:
+                self.thread.start()
+            except (KeyboardInterrupt, SystemExit):
+                sys.exit()
 
     def record(self):
+        self.statusLabel.setText("Đang ghi")
         text = self.textInput.toPlainText()
         if text:
-            file_name = slugify(re.sub(self.cleanR, '', text)) + '.wav'
+            file_name = str(self.current_index) + '.wav'
             self.st = 1
             self.frames = []
             stream = self.p.open(format=self.FORMAT, channels=self.CHANNELS, rate=self.RATE, input=True,
@@ -135,11 +129,54 @@ class Ui(QtWidgets.QMainWindow):
             self.current_sentence['file'] = file_name
 
     def end_record(self):
-        if threading.active_count() > 0:
-            self.st = 0
+        self.statusLabel.setText("Dừng ghi")
+        self.st = 0
+        if self.thread:
             self.thread.join()
+
+    def go_next(self):
+        self.textInput.setPlainText('')
+        if self.thread:
+            self.end_record()
+        if self.current_sentence:
             self.sentences.append(self.current_sentence)
+
+            if len(self.sentences) == 0:
+                self.textBrowser.setHtml(
+                    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" "
+                    "\"http://www.w3.org/TR/REC-html40/strict.dtd\">\n "
+                    "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                    "p, li { white-space: pre-wrap; }\n"
+                    "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; "
+                    "font-style:normal;\">\n "
+                    "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; "
+                    "-qt-block-indent:0; text-indent:0px;\">Không có câu nào được lưu lại.</p></body></html> "
+                )
+            else:
+                self.textBrowser.setHtml(
+                    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" "
+                    "\"http://www.w3.org/TR/REC-html40/strict.dtd\">\n "
+                    "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                    "p, li { white-space: pre-wrap; }\n"
+                    "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; "
+                    "font-style:normal;\">\n "
+                    "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; "
+                    "-qt-block-indent:0; text-indent:0px;\">\n "
+                    + "Câu cuối cùng được lưu lại: <br>"
+                    + self.sentences[self.current_index]['text'] +
+                    "</p></body></html>"
+                )
+
+            self.current_index = self.current_index + 1
             self.current_sentence = {}
+
+    def save_and_quit(self):
+        f = open(self.dir_path + os.sep + 'index.txt', 'a', encoding='utf-8')
+        for block in self.sentences:
+            f.write(block['text'] + '\n')
+            f.write(block['file'] + '\n')
+        f.close()
+        self.close()
 
     def closeEvent(self, event):
         print(threading.active_count())

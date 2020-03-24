@@ -45,7 +45,7 @@ class Ui(QtWidgets.QMainWindow):
         self.RATE = rate
         self.p = py
         self.frames = []
-        self.st = 1
+        self.st = 0
         self.stream = self.p.open(format=self.FORMAT, channels=self.CHANNELS, rate=self.RATE, input=True,
                                   frames_per_buffer=self.CHUNK)
 

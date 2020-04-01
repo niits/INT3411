@@ -173,8 +173,8 @@ class Ui(QtWidgets.QMainWindow):
     def save_and_quit(self):
         f = open(self.dir_path + os.sep + 'index.txt', 'a', encoding='utf-8')
         for block in self.sentences:
-            f.write(block['text'] + '\n')
             f.write(block['file'] + '\n')
+            f.write(block['text'] + '\n')
         f.close()
         self.close()
 

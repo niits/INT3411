@@ -98,5 +98,5 @@ if __name__ == "__main__":
             score = {cname: model.score(O, [len(O)]) for cname, model in models.items() if cname[:4] != 'test'}
             predict = max(score.items(), key=operator.itemgetter(1))[0]
             true_predict = true_predict + int(predict == (true_cname[5:] if true_cname[:4] == 'test' else true_cname))
-        print(true_cname, true_predict * 100 / total, '%')
+        print(true_cname, math.floor(true_predict * 100 / total), '%')
 

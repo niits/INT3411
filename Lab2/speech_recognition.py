@@ -56,15 +56,15 @@ if __name__ == "__main__":
         hmm = hmmlearn.hmm.GMMHMM(
             n_components=5, n_mix=2, random_state=42, n_iter=1000, verbose=True,
             params='mctw',
-            init_params='mc',
-            #         startprob_prior = np.array([1.0,0.0,0.0,0.0,0.0]),
-            #         transmat_prior = np.array([
-            #             [0.7,0.3,0.0,0.0,0.0],
-            #             [0.0,0.7,0.3,0.0,0.0],
-            #             [0.0,0.0,0.7,0.3,0.0],
-            #             [0.0,0.0,0.0,0.7,0.3],
-            #             [0.0,0.0,0.0,0.0,1.0],
-            #         ])
+            init_params='mct',
+                    startprob_prior = np.array([1.0,0.0,0.0,0.0,0.0]),
+                    transmat_prior = np.array([
+                        [0.7,0.3,0.0,0.0,0.0],
+                        [0.0,0.7,0.3,0.0,0.0],
+                        [0.0,0.0,0.7,0.3,0.0],
+                        [0.0,0.0,0.0,0.7,0.3],
+                        [0.0,0.0,0.0,0.0,1.0],
+                    ])
         )
         hmm.startprob_ = np.array([1.0, 0.0, 0.0, 0.0, 0.0])
     #     hmm.transmat_ = np.array([

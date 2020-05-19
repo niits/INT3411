@@ -17,13 +17,11 @@ class Ui(QtWidgets.QMainWindow):
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
 
-        self.startButton = self.findChild(QtWidgets.QPushButton, 'startButton')
-        self.endButton = self.findChild(QtWidgets.QPushButton, 'endButton')
+        self.recordButton = self.findChild(QtWidgets.QPushButton, 'recordButton')
 
         self.textBrowser = self.findChild(QtWidgets.QTextBrowser, 'textBrowser')
 
-        self.startButton.clicked.connect(self.start_record)
-        self.endButton.clicked.connect(self.end_record)
+        self.recordButton.clicked.connect(self.update)
 
         self.CHUNK = chunk
         self.FORMAT = frmat
@@ -37,16 +35,22 @@ class Ui(QtWidgets.QMainWindow):
         self.thread = None
         self.show()
 
-    def start_record(self):
-        self.textBrowser.setText('')
-
-        if not self.st:
-            self.thread = threading.Thread(target=self.record)
-            self.thread.setDaemon(True)
-            try:
-                self.thread.start()
-            except (KeyboardInterrupt, SystemExit):
-                sys.exit()
+    def update(self):
+        if self.thread and self.st:
+            self.recordButton.setText('Ghi')
+            self.st = 0
+            self.thread.join()
+            self.set_predict_text()
+        else:
+            self.recordButton.setText('Dung ghi')
+            self.textBrowser.setText('')
+            if not self.st:
+                self.thread = threading.Thread(target=self.record)
+                self.thread.setDaemon(True)
+                try:
+                    self.thread.start()
+                except (KeyboardInterrupt, SystemExit):
+                    sys.exit()
 
     def record(self):
 
@@ -72,13 +76,7 @@ class Ui(QtWidgets.QMainWindow):
         O = self.get_mfcc(file_name)
         score = {cname: model.score(O, [len(O)]) for cname, model in self.models.items()}
         self.predict = max(score.items(), key=operator.itemgetter(1))[0]
-
-    def end_record(self):
-        if self.thread and self.st:
-            self.st = 0
-            self.thread.join()
-            self.set_predict_text()
-
+        
     def set_predict_text(self):
         text = 'Không thể đoán nhận từ vừa đọc'
         if self.predict == 'song':

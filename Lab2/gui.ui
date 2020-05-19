@@ -26,30 +26,17 @@
     <string>Doan nhan:</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="startButton">
+  <widget class="QPushButton" name="recordButton">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>32</y>
+     <x>130</x>
+     <y>40</y>
      <width>75</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
     <string>Ghi</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>32</y>
-     <width>81</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Dung ghi</string>
    </property>
   </widget>
   <widget class="QTextBrowser" name="textBrowser">

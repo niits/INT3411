@@ -41,7 +41,7 @@ if __name__ == "__main__":
         dataset_test[name] = get_class_data(folder_name)
 
     models = None
-    with open("test.pkl", "rb") as file: 
+    with open("output_final.pkl", "rb") as file: 
       models = pickle.load(file)
 
     err = []

@@ -9,7 +9,7 @@ import math as m
 import numpy as np
 import pickle
 import operator
-
+import scipy as sp
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self, chunk=3024, frmat=pyaudio.paInt16, channels=2, rate=44100, py=pyaudio.PyAudio()):
@@ -30,7 +30,7 @@ class Ui(QtWidgets.QMainWindow):
         self.p = py
         self.frames = []
         self.st = 0
-        with open("output.pkl", "rb") as file: self.models = pickle.load(file)
+        with open("output_final.pkl", "rb") as file: self.models = pickle.load(file)
         self.predict = ''
         self.thread = None
         self.show()
@@ -94,11 +94,17 @@ class Ui(QtWidgets.QMainWindow):
 
     def get_mfcc(self, file_path):
         y, sr = librosa.load(file_path)  # read .wav file
+
         hop_length = m.floor(sr * 0.010)  # 10ms hop
         win_length = m.floor(sr * 0.025)  # 25ms frame
 
+        y_trimmed, index = librosa.effects.trim(y, top_db=20, frame_length=win_length, hop_length=hop_length)
+        y_trimmed = sp.signal.medfilt(y_trimmed, 3)
+
+        trimmed_length = librosa.get_duration(y) - librosa.get_duration(y_trimmed)
+
         mfcc = librosa.feature.mfcc(
-            y, sr, n_mfcc=12, n_fft=1024,
+            y_trimmed, sr, n_mfcc=12, n_fft=1024,
             hop_length=hop_length, win_length=win_length)
 
         mfcc = mfcc - np.mean(mfcc, axis=1).reshape((-1, 1))

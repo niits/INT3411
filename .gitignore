@@ -3,3 +3,6 @@ __pycache__/
 records/
 .vscode/
 Lab2/data.wav
+Lab3/data/output
+Lab3/data/wav
+Lab3/list/*.list

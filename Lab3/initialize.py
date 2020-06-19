@@ -35,17 +35,17 @@ if __name__ == "__main__":
     LIST_FILES = {
         'source': 
             {
-                'eval': 'list/SF3_eval.list',
-                'train': 'list/SF3_train.list'
+                'eval': os.path.join('list', 'SF3_eval.list'),
+                'train': os.path.join('list', 'SF3_train.list')
             },
         'target': 
             {
-            'eval': 'list/TM3_eval.list',
-            'train': 'list/TM3_train.list'
+                'eval': os.path.join('list', 'TM3_eval.list'),
+                'train': os.path.join('list', 'TM3_train.list')
             }
         }
 
     for part, speaker in LABELS.items():
-        create_list(LIST_FILES[part], 'data/wav/' + speaker)
+        create_list(LIST_FILES[part], os.path.join('data', 'wav') + speaker)
 
 

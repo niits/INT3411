@@ -46,6 +46,6 @@ if __name__ == "__main__":
         }
 
     for part, speaker in LABELS.items():
-        create_list(LIST_FILES[part], os.path.join('data', 'wav') + speaker)
+        create_list(LIST_FILES[part], os.path.join('data', 'wav', speaker) )
 
 

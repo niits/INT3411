@@ -61,9 +61,10 @@ if __name__ == "__main__":
         for line in fp:
             f = line.rstrip()
             convert.main(
-                    LABELS["source"], LABELS["target"],
-                    os.path.join('conf', 'speaker.yml'),
-                    os.path.join('conf', 'pair.yml'),
-                    f,
-                    os.path.join('data', 'wav'),
-                    os.path.join('data', 'output'))
+                LABELS["source"], 
+                LABELS["target"],
+                os.path.join('conf', 'speaker.yml'),
+                os.path.join('conf', 'pair.yml'),
+                os.path.join('data', 'output', 'FM'),
+                os.path.join('data', 'wav', f + '.wav'),
+                os.path.join('data', 'wav', f + '_out.wav'))

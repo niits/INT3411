@@ -4,4 +4,4 @@ fastdtw==0.3.4
 h5py==2.10.0
 pysptk==0.1.18
 pyworld==0.2.10
-PyYAML==5.3
+PyYAML==5.4
